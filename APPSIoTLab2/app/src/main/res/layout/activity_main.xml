@@ -7,17 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:title="APPSIot - Lab 2"
-        app:titleTextColor="@color/white"/>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,8 +26,8 @@
 
 
         <ImageView
-            android:layout_width="280dp"
-            android:layout_height="280dp"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
             android:layout_gravity="center"
             android:paddingVertical="20dp"
             app:srcCompat="@drawable/antenna_logo" />
@@ -56,8 +45,8 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_height="90dp"
             android:paddingVertical="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -68,7 +57,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/play"
+            android:id="@+id/buttonPlay"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:textSize="25sp"
