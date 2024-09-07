@@ -33,6 +33,7 @@ import java.util.Random;
 public class GameActivity extends AppCompatActivity {
 
     private ArrayList<String> historialResultados = new ArrayList<>();
+    private String estadoGame = "PLAYING";
 
     private String[] listPalabras;
     private Random random;
@@ -50,9 +51,6 @@ public class GameActivity extends AppCompatActivity {
     // Cronómetro de juego
     private Instant inicio;
     private Instant fin;
-
-    // Bundle para Mantener el Estado del Juego
-    Bundle estadoGame = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,7 +188,9 @@ public class GameActivity extends AppCompatActivity {
             findViewById(R.id.Y).setEnabled(true);
             findViewById(R.id.Z).setEnabled(true);
 
-            historialResultados.add("Canceló");
+            if (estadoGame.equals("PLAYING")){
+                historialResultados.add("Canceló");
+            }
 
             initGame();
 
@@ -217,13 +217,13 @@ public class GameActivity extends AppCompatActivity {
 
 
         String palabraOculta = listPalabras[random.nextInt(listPalabras.length)];
-        Log.d("INFO", "Palabra Aleatoria:" + " " + palabraOculta);
 
         while (palabraOculta.equals(palabraActual)) {
             palabraOculta = listPalabras[random.nextInt(listPalabras.length)];
         }
 
         palabraActual = palabraOculta;
+        Log.d("INFO", "Palabra Aleatoria:" + " " + palabraActual);
 
         viewLetra = new TextView[palabraActual.length()];
 
@@ -273,7 +273,10 @@ public class GameActivity extends AppCompatActivity {
 
         if (contadorMatchs == palabraActual.length()){
             Log.d("GANO", "Entrada a endGame ganando.");
+            estadoGame = "WIN";
             endGame();
+        } else {
+            estadoGame = "PLAYING";
         }
 
     }
@@ -283,24 +286,29 @@ public class GameActivity extends AppCompatActivity {
 
         if (vidas == 5){
             findViewById(R.id.cabeza).setVisibility(View.VISIBLE);
+            estadoGame = "PLAYING";
         } else if (vidas == 4){
             findViewById(R.id.cabeza).setVisibility(View.VISIBLE);
             findViewById(R.id.torso).setVisibility(View.VISIBLE);
+            estadoGame = "PLAYING";
         } else if (vidas == 3) {
             findViewById(R.id.cabeza).setVisibility(View.VISIBLE);
             findViewById(R.id.torso).setVisibility(View.VISIBLE);
             findViewById(R.id.brazoDerecha).setVisibility(View.VISIBLE);
+            estadoGame = "PLAYING";
         } else if (vidas == 2) {
             findViewById(R.id.cabeza).setVisibility(View.VISIBLE);
             findViewById(R.id.torso).setVisibility(View.VISIBLE);
             findViewById(R.id.brazoDerecha).setVisibility(View.VISIBLE);
             findViewById(R.id.brazoIzquierda).setVisibility(View.VISIBLE);
+            estadoGame = "PLAYING";
         } else if (vidas == 1) {
             findViewById(R.id.cabeza).setVisibility(View.VISIBLE);
             findViewById(R.id.torso).setVisibility(View.VISIBLE);
             findViewById(R.id.brazoDerecha).setVisibility(View.VISIBLE);
             findViewById(R.id.brazoIzquierda).setVisibility(View.VISIBLE);
             findViewById(R.id.piernaIzquierda).setVisibility(View.VISIBLE);
+            estadoGame = "PLAYING";
         } else if (vidas == 0){
             findViewById(R.id.cabeza).setVisibility(View.VISIBLE);
             findViewById(R.id.torso).setVisibility(View.VISIBLE);
@@ -308,22 +316,17 @@ public class GameActivity extends AppCompatActivity {
             findViewById(R.id.brazoIzquierda).setVisibility(View.VISIBLE);
             findViewById(R.id.piernaIzquierda).setVisibility(View.VISIBLE);
             findViewById(R.id.piernaDerecha).setVisibility(View.VISIBLE);
-            Log.d("GANO", "Entrada a endGame perdiendo.");
+            Log.d("PERDIO", "Entrada a endGame perdiendo.");
+            estadoGame = "LOSS";
             endGame();
         }
 
     }
 
-    private void guardarBundleEstadoJuego() {
-        estadoGame.putString("palabraOculta", palabraActual);
-        estadoGame.putInt("vidas", vidas);
-        estadoGame.putStringArrayList("letrasDescubiertas", letrasDescubiertas);
-        estadoGame.putStringArrayList("historialResultados", historialResultados);
-    }
-
     private void recibirBundleNombre() {
         Bundle recibeNombre = getIntent().getExtras();
         String nombre = recibeNombre.getString("usuarioNombre");
+        Log.d("NOMBRE_USUARIO", nombre);
     }
 
 
@@ -388,7 +391,13 @@ public class GameActivity extends AppCompatActivity {
 
         if (item.getItemId() == R.id.stats){
             Log.d("STATISTICS", "To stats page.");
+
+            Bundle historialBundle = new Bundle();
+
+            historialBundle.putStringArrayList("historialResultados", historialResultados);
+
             Intent intent = new Intent(GameActivity.this, StatsActivity.class);
+            intent.putExtras(historialBundle);
             startActivity(intent);
             return true;
         }

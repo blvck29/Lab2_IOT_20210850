@@ -42,7 +42,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/button"
                 app:layout_constraintHorizontal_bias="1.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -59,10 +58,11 @@
             android:layout_height="550dp">
 
             <LinearLayout
-                android:id="@+id/estadisticasLayout"
+                android:id="@+id/historialLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                android:gravity="left"/>
         </ScrollView>
 
 
