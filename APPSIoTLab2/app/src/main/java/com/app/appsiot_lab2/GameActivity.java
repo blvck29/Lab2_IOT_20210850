@@ -1,6 +1,5 @@
 package com.app.appsiot_lab2;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,8 +22,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.chip.ChipGroup;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -37,6 +40,13 @@ public class GameActivity extends AppCompatActivity {
 
     private ChipGroup casillasPalabra;
     private TextView[] viewLetra;
+
+    LinearLayout resultText;
+
+    // Cronómetro de juego
+
+    private Instant inicio;
+    private Instant fin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +141,7 @@ public class GameActivity extends AppCompatActivity {
         listPalabras = getResources().getStringArray(R.array.palabras);
         random = new Random();
         casillasPalabra = findViewById(R.id.casillas);
+        resultText = findViewById(R.id.resultados);
 
         initGame();
 
@@ -140,6 +151,7 @@ public class GameActivity extends AppCompatActivity {
         Button playAgain = findViewById(R.id.playAgain);
         playAgain.setOnClickListener(view -> {
             casillasPalabra.removeAllViews();
+            resultText.removeAllViews();
 
             findViewById(R.id.A).setEnabled(true);
             findViewById(R.id.B).setEnabled(true);
@@ -174,6 +186,10 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void initGame(){
+
+        // Cronómetro de juego
+        inicio = Instant.now();
+
 
         letrasDescubiertas = new ArrayList<>();
         vidas = 6;
@@ -236,6 +252,12 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         }
+
+        if (letrasDescubiertas.size() == palabraActual.length()){
+            Log.d("GANO", "Entrada a endGame ganando.");
+            endGame();
+        }
+
     }
 
 
@@ -253,47 +275,66 @@ public class GameActivity extends AppCompatActivity {
             findViewById(R.id.piernaIzquierda).setVisibility(View.VISIBLE);
         } else if (vidas == 0){
             findViewById(R.id.piernaDerecha).setVisibility(View.VISIBLE);
+            endGame();
         }
 
     }
 
+    private void endGame() {
 
-    private void checkLetter(){
-        String palabraOculta = listPalabras[random.nextInt(listPalabras.length)];
-        Log.d("INFO", "Palabra Aleatoria:" + " " + palabraOculta);
+        // Cronómetro de juego
+        fin = Instant.now();
 
-        while (palabraOculta.equals(palabraActual)) {
-            palabraOculta = listPalabras[random.nextInt(listPalabras.length)];
+        long duracion = Duration.between(inicio, fin).toSeconds();
+
+        findViewById(R.id.A).setEnabled(false);
+        findViewById(R.id.B).setEnabled(false);
+        findViewById(R.id.C).setEnabled(false);
+        findViewById(R.id.D).setEnabled(false);
+        findViewById(R.id.E).setEnabled(false);
+        findViewById(R.id.F).setEnabled(false);
+        findViewById(R.id.G).setEnabled(false);
+        findViewById(R.id.H).setEnabled(false);
+        findViewById(R.id.I).setEnabled(false);
+        findViewById(R.id.J).setEnabled(false);
+        findViewById(R.id.K).setEnabled(false);
+        findViewById(R.id.L).setEnabled(false);
+        findViewById(R.id.M).setEnabled(false);
+        findViewById(R.id.N).setEnabled(false);
+        findViewById(R.id.O).setEnabled(false);
+        findViewById(R.id.P).setEnabled(false);
+        findViewById(R.id.Q).setEnabled(false);
+        findViewById(R.id.R).setEnabled(false);
+        findViewById(R.id.S).setEnabled(false);
+        findViewById(R.id.T).setEnabled(false);
+        findViewById(R.id.U).setEnabled(false);
+        findViewById(R.id.V).setEnabled(false);
+        findViewById(R.id.W).setEnabled(false);
+        findViewById(R.id.X).setEnabled(false);
+        findViewById(R.id.Y).setEnabled(false);
+        findViewById(R.id.Z).setEnabled(false);
+
+        TextView resultados = new TextView(this);
+        resultados.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        resultados.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        resultados.setGravity(Gravity.CENTER);
+        resultados.setTextColor(Color.BLACK);
+
+        String tiempo = String.valueOf(duracion);
+
+        if (vidas == 0){
+            resultados.setText("Terminó en " + tiempo + " segundos.");
+        } else if (letrasDescubiertas.size() == palabraActual.length()){
+            resultados.setText("Ganó en " + tiempo + " segundos.");
         }
 
-        palabraActual = palabraOculta;
-
-        viewLetra = new TextView[palabraActual.length()];
-
-        for (int i = 0; i<palabraActual.length(); i++){
-            viewLetra[i] = new TextView(this);
-            viewLetra[i].setText(String.valueOf(palabraActual.charAt(i)));
-            viewLetra[i].setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            viewLetra[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-            viewLetra[i].setGravity(Gravity.CENTER);
-            viewLetra[i].setTextColor(Color.BLACK);
-            viewLetra[i].setBackgroundResource(R.drawable.bg_letras);
-
-            casillasPalabra.addView(viewLetra[i]);
-        }
+        resultText.addView(resultados);
     }
 
 
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        if (item.getItemId() == R.id.back){
-            Log.d("msgOptMainMenu","Return");
-            Intent intent = new Intent(GameActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
 
         if (item.getItemId() == R.id.stats){
             Log.d("msgOptMainMenu","Stats");

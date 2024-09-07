@@ -3,12 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/back"
-        android:icon="@drawable/baseline_keyboard_return_24"
-        android:title="Back"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/stats"
         android:icon="@drawable/baseline_query_stats_24"
         android:title="Stats"
