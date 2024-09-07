@@ -50,6 +50,7 @@
             android:paddingVertical="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nombreInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"

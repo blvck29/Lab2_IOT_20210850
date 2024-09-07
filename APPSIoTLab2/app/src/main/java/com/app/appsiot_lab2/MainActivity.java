@@ -12,7 +12,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
+
+    TextInputEditText usuarioNombre;
+    Button buttonPlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,14 +34,26 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        usuarioNombre = findViewById(R.id.nombreInput);
+        buttonPlay = findViewById(R.id.buttonPlay);
 
-        Button buttonPlay = findViewById(R.id.buttonPlay);
         buttonPlay.setOnClickListener(view -> {
 
-            Intent intent = new Intent(MainActivity.this, GameActivity.class);
-            startActivity(intent);
+            if (usuarioNombre.getText().toString() != null && !usuarioNombre.getText().toString().trim().isEmpty()) {
+                Bundle enviaNombre = new Bundle();
+                enviaNombre.putString("usuarioNombre", Objects.requireNonNull(usuarioNombre.getText()).toString());
 
+                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                intent.putExtras(enviaNombre);
+                startActivity(intent);
+            } else {
+
+                usuarioNombre.setError("Por favor, ingresa un nombre");
+            }
         });
+
+
+
 
 
     }

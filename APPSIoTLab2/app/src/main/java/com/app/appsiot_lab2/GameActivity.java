@@ -1,5 +1,6 @@
 package com.app.appsiot_lab2;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,11 +26,14 @@ import com.google.android.material.chip.ChipGroup;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
-import java.util.Timer;
-import java.util.concurrent.TimeUnit;
+
 
 public class GameActivity extends AppCompatActivity {
+
+    private ArrayList<String> historialResultados;
+    private ArrayList<String> historialTiempos;
 
     private String[] listPalabras;
     private Random random;
@@ -44,14 +48,18 @@ public class GameActivity extends AppCompatActivity {
     LinearLayout resultText;
 
     // Cronómetro de juego
-
     private Instant inicio;
     private Instant fin;
+
+    // Bundle para Mantener el Estado del Juego
+    Bundle estadoGame = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        getSupportActionBar().setTitle("TeleGame");
 
         EdgeToEdge.enable(this);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -183,6 +191,7 @@ public class GameActivity extends AppCompatActivity {
             initGame();
         });
 
+
     }
 
     private void initGame(){
@@ -266,19 +275,46 @@ public class GameActivity extends AppCompatActivity {
         if (vidas == 5){
             findViewById(R.id.cabeza).setVisibility(View.VISIBLE);
         } else if (vidas == 4){
+            findViewById(R.id.cabeza).setVisibility(View.VISIBLE);
             findViewById(R.id.torso).setVisibility(View.VISIBLE);
         } else if (vidas == 3) {
+            findViewById(R.id.cabeza).setVisibility(View.VISIBLE);
+            findViewById(R.id.torso).setVisibility(View.VISIBLE);
             findViewById(R.id.brazoDerecha).setVisibility(View.VISIBLE);
         } else if (vidas == 2) {
+            findViewById(R.id.cabeza).setVisibility(View.VISIBLE);
+            findViewById(R.id.torso).setVisibility(View.VISIBLE);
+            findViewById(R.id.brazoDerecha).setVisibility(View.VISIBLE);
             findViewById(R.id.brazoIzquierda).setVisibility(View.VISIBLE);
         } else if (vidas == 1) {
+            findViewById(R.id.cabeza).setVisibility(View.VISIBLE);
+            findViewById(R.id.torso).setVisibility(View.VISIBLE);
+            findViewById(R.id.brazoDerecha).setVisibility(View.VISIBLE);
+            findViewById(R.id.brazoIzquierda).setVisibility(View.VISIBLE);
             findViewById(R.id.piernaIzquierda).setVisibility(View.VISIBLE);
         } else if (vidas == 0){
+            findViewById(R.id.cabeza).setVisibility(View.VISIBLE);
+            findViewById(R.id.torso).setVisibility(View.VISIBLE);
+            findViewById(R.id.brazoDerecha).setVisibility(View.VISIBLE);
+            findViewById(R.id.brazoIzquierda).setVisibility(View.VISIBLE);
+            findViewById(R.id.piernaIzquierda).setVisibility(View.VISIBLE);
             findViewById(R.id.piernaDerecha).setVisibility(View.VISIBLE);
             endGame();
         }
 
     }
+
+    private void guardarBundleEstadoJuego() {
+        estadoGame.putString("palabraOculta", palabraActual);
+        estadoGame.putInt("vidas", vidas);
+        estadoGame.putStringArrayList("letrasDescubiertas", letrasDescubiertas);
+    }
+
+    private void recibirBundleNombre() {
+        Bundle recibeNombre = getIntent().getExtras();
+        String nombre = recibeNombre.getString("usuarioNombre");
+    }
+
 
     private void endGame() {
 
@@ -323,7 +359,7 @@ public class GameActivity extends AppCompatActivity {
         String tiempo = String.valueOf(duracion);
 
         if (vidas == 0){
-            resultados.setText("Terminó en " + tiempo + " segundos.");
+            resultados.setText("Perdió en " + tiempo + " segundos.");
         } else if (letrasDescubiertas.size() == palabraActual.length()){
             resultados.setText("Ganó en " + tiempo + " segundos.");
         }
@@ -331,17 +367,17 @@ public class GameActivity extends AppCompatActivity {
         resultText.addView(resultados);
     }
 
-
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.stats){
-            Log.d("msgOptMainMenu","Stats");
+            Log.d("STATISTICS", "To stats page.");
+            Intent intent = new Intent(GameActivity.this, StatsActivity.class);
+            startActivity(intent);
             return true;
         }
 
-        return super .onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
