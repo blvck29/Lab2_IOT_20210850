@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ public class GameActivity extends AppCompatActivity {
     private Random random;
 
     private String palabraActual;
+    private int letrasDescubiertas;
 
     private ChipGroup casillasPalabra;
     private TextView[] viewLetra;
@@ -51,11 +53,88 @@ public class GameActivity extends AppCompatActivity {
 
         initGame();
 
-    }
 
+        Button playAgain = findViewById(R.id.playAgain);
+        playAgain.setOnClickListener(view -> {
+            casillasPalabra.removeAllViews();
+            initGame();
+        });
+
+        Button buttonA = findViewById(R.id.A);
+        buttonA.setOnClickListener(view -> {
+
+            if (palabraActual.contains("A")){
+                showLetters("A");
+            } else {
+                badLetter();
+            }
+
+            buttonA.setEnabled(false);
+
+        });
+
+    }
 
     private void initGame(){
 
+        letrasDescubiertas = 0;
+        String palabraOculta = listPalabras[random.nextInt(listPalabras.length)];
+        Log.d("INFO", "Palabra Aleatoria:" + " " + palabraOculta);
+
+        while (palabraOculta.equals(palabraActual)) {
+            palabraOculta = listPalabras[random.nextInt(listPalabras.length)];
+        }
+
+        palabraActual = palabraOculta;
+
+        viewLetra = new TextView[palabraActual.length()];
+
+        for (int i = 0; i<palabraActual.length(); i++){
+            viewLetra[i] = new TextView(this);
+            viewLetra[i].setBackgroundResource(R.drawable.bg_letras);
+
+            casillasPalabra.addView(viewLetra[i]);
+        }
+    }
+
+
+    private void showLetters(String letter){
+
+        casillasPalabra.removeAllViews();
+
+        for (int i = 0; i<palabraActual.length(); i++){
+
+            if (!letter.equals(String.valueOf(palabraActual.charAt(i)))){
+
+                viewLetra[i] = new TextView(this);
+                viewLetra[i].setBackgroundResource(R.drawable.bg_letras);
+
+            } else {
+
+                viewLetra[i] = new TextView(this);
+                viewLetra[i].setText(String.valueOf(palabraActual.charAt(i)));
+                viewLetra[i].setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                viewLetra[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+                viewLetra[i].setGravity(Gravity.CENTER);
+                viewLetra[i].setTextColor(Color.BLACK);
+                viewLetra[i].setBackgroundResource(R.drawable.bg_letras);
+
+            }
+
+            casillasPalabra.addView(viewLetra[i]);
+        }
+
+    }
+
+
+    private void badLetter() {
+
+        // Muestra una parte del moningote como restando vidas :c
+
+    }
+
+
+    private void checkLetter(){
         String palabraOculta = listPalabras[random.nextInt(listPalabras.length)];
         Log.d("INFO", "Palabra Aleatoria:" + " " + palabraOculta);
 
@@ -71,29 +150,10 @@ public class GameActivity extends AppCompatActivity {
             viewLetra[i] = new TextView(this);
             viewLetra[i].setText(String.valueOf(palabraActual.charAt(i)));
             viewLetra[i].setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            viewLetra[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+            viewLetra[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
             viewLetra[i].setGravity(Gravity.CENTER);
             viewLetra[i].setTextColor(Color.BLACK);
-
-            casillasPalabra.addView(viewLetra[i]);
-        }
-
-    }
-
-    private void GetLetters() {
-
-        // Aqui iría un método para entender cada click en el teclado como un String y comparar con la palabraOculta.
-
-    }
-
-
-    private void checkLetter(){
-        for (int i = 0; i<palabraActual.length(); i++){
-            viewLetra[i] = new TextView(this);
-            viewLetra[i].setText(palabraActual.charAt(i));
-            viewLetra[i].setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            viewLetra[i].setGravity(Gravity.CENTER);
-            viewLetra[i].setTextColor(Color.BLACK);
+            viewLetra[i].setBackgroundResource(R.drawable.bg_letras);
 
             casillasPalabra.addView(viewLetra[i]);
         }
