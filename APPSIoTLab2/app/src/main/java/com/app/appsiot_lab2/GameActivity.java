@@ -32,14 +32,14 @@ import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
 
-    private ArrayList<String> historialResultados;
-    private ArrayList<String> historialTiempos;
+    private ArrayList<String> historialResultados = new ArrayList<>();
 
     private String[] listPalabras;
     private Random random;
 
     private String palabraActual;
     private ArrayList<String> letrasDescubiertas;
+    int contadorMatchs;
     private int vidas;
 
     private ChipGroup casillasPalabra;
@@ -151,6 +151,8 @@ public class GameActivity extends AppCompatActivity {
         casillasPalabra = findViewById(R.id.casillas);
         resultText = findViewById(R.id.resultados);
 
+        recibirBundleNombre();
+
         initGame();
 
 
@@ -188,7 +190,10 @@ public class GameActivity extends AppCompatActivity {
             findViewById(R.id.Y).setEnabled(true);
             findViewById(R.id.Z).setEnabled(true);
 
+            historialResultados.add("Canceló");
+
             initGame();
+
         });
 
 
@@ -198,7 +203,6 @@ public class GameActivity extends AppCompatActivity {
 
         // Cronómetro de juego
         inicio = Instant.now();
-
 
         letrasDescubiertas = new ArrayList<>();
         vidas = 6;
@@ -245,8 +249,11 @@ public class GameActivity extends AppCompatActivity {
 
     private void showLetters(){
 
-        for (String letra : letrasDescubiertas) {
+        Log.d("LETRAS_DESC", String.valueOf(letrasDescubiertas));
 
+        contadorMatchs = 0;
+
+        for (String letra : letrasDescubiertas) {
 
             for (int i = 0; i < palabraActual.length(); i++) {
 
@@ -258,11 +265,13 @@ public class GameActivity extends AppCompatActivity {
                     viewLetra[i].setGravity(Gravity.CENTER);
                     viewLetra[i].setTextColor(Color.BLACK);
                     viewLetra[i].setBackgroundResource(R.drawable.bg_letras);
+
+                    contadorMatchs = contadorMatchs+1;
                 }
             }
         }
 
-        if (letrasDescubiertas.size() == palabraActual.length()){
+        if (contadorMatchs == palabraActual.length()){
             Log.d("GANO", "Entrada a endGame ganando.");
             endGame();
         }
@@ -299,6 +308,7 @@ public class GameActivity extends AppCompatActivity {
             findViewById(R.id.brazoIzquierda).setVisibility(View.VISIBLE);
             findViewById(R.id.piernaIzquierda).setVisibility(View.VISIBLE);
             findViewById(R.id.piernaDerecha).setVisibility(View.VISIBLE);
+            Log.d("GANO", "Entrada a endGame perdiendo.");
             endGame();
         }
 
@@ -308,6 +318,7 @@ public class GameActivity extends AppCompatActivity {
         estadoGame.putString("palabraOculta", palabraActual);
         estadoGame.putInt("vidas", vidas);
         estadoGame.putStringArrayList("letrasDescubiertas", letrasDescubiertas);
+        estadoGame.putStringArrayList("historialResultados", historialResultados);
     }
 
     private void recibirBundleNombre() {
@@ -358,12 +369,17 @@ public class GameActivity extends AppCompatActivity {
 
         String tiempo = String.valueOf(duracion);
 
-        if (vidas == 0){
-            resultados.setText("Perdió en " + tiempo + " segundos.");
-        } else if (letrasDescubiertas.size() == palabraActual.length()){
-            resultados.setText("Ganó en " + tiempo + " segundos.");
-        }
+        String resultadoTiempo = null;
 
+        if (vidas == 0){
+            resultadoTiempo = "Perdió en " + tiempo + " segundos.";
+        } else if (contadorMatchs == palabraActual.length()){
+            resultadoTiempo = "Ganó en " + tiempo + " segundos.";
+        }
+        resultados.setText(resultadoTiempo);
+
+        historialResultados.add(resultadoTiempo);
+        Log.d("HISTORIAL", historialResultados.get(historialResultados.size()-1));
         resultText.addView(resultados);
     }
 
