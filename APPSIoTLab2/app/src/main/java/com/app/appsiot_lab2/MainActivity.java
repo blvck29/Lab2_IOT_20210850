@@ -1,12 +1,19 @@
 package com.app.appsiot_lab2;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -34,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        registerForContextMenu((TextView) findViewById(R.id.telegame));
+
         usuarioNombre = findViewById(R.id.nombreInput);
         buttonPlay = findViewById(R.id.buttonPlay);
 
@@ -51,12 +60,30 @@ public class MainActivity extends AppCompatActivity {
                 usuarioNombre.setError("Por favor, ingresa un nombre");
             }
         });
-
-
-
-
-
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.context_menu,menu);
+    }
 
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+        TextView TeleText = findViewById(R.id.telegame);
+
+        if (item.getItemId() == R.id.verde){
+            TeleText.setTextColor(Color.parseColor("#32a852"));
+        }
+        if (item.getItemId() == R.id.rojo){
+            TeleText.setTextColor(Color.parseColor("#c92828"));
+        }
+        if (item.getItemId() == R.id.morado){
+            TeleText.setTextColor(Color.parseColor("#6328c9"));
+        }
+
+
+        return super.onContextItemSelected(item);
+    }
 }
