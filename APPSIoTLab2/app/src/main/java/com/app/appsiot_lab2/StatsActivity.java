@@ -53,6 +53,11 @@ public class StatsActivity extends AppCompatActivity {
             }
         });
 
+        Bundle recibeNombreUsuario = getIntent().getExtras();
+        String nombreUsuario = recibeNombreUsuario.getString("usuarioNombre");
+        TextView nombreText = findViewById(R.id.nombreJugador);
+        nombreText.setText("Jugador: " + nombreUsuario);
+
         Bundle recibeHistorial = getIntent().getExtras();
         ArrayList<String> historialResultados = recibeHistorial.getStringArrayList("historialResultados");
 

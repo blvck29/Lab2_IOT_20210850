@@ -392,12 +392,15 @@ public class GameActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.stats){
             Log.d("STATISTICS", "To stats page.");
 
+            Bundle nombreUsuarioBundle = getIntent().getExtras();
+
             Bundle historialBundle = new Bundle();
 
             historialBundle.putStringArrayList("historialResultados", historialResultados);
 
             Intent intent = new Intent(GameActivity.this, StatsActivity.class);
             intent.putExtras(historialBundle);
+            intent.putExtras(nombreUsuarioBundle);
             startActivity(intent);
             return true;
         }
