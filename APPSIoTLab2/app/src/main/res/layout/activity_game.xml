@@ -33,7 +33,6 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="50dp"
                 android:layout_marginStart="235dp"
-                android:visibility="invisible"
                 app:srcCompat="@drawable/head" />
 
             <ImageView
@@ -42,7 +41,6 @@
                 android:layout_height="80dp"
                 android:layout_marginTop="105dp"
                 android:layout_marginStart="255dp"
-                android:visibility="invisible"
                 app:srcCompat="@drawable/torso" />
 
             <ImageView
@@ -51,7 +49,6 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="105dp"
                 android:layout_marginStart="265dp"
-                android:visibility="invisible"
                 app:srcCompat="@drawable/brazo_pierna_der" />
 
             <ImageView
@@ -60,7 +57,6 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="105dp"
                 android:layout_marginStart="210dp"
-                android:visibility="invisible"
                 app:srcCompat="@drawable/brazo_pierna_izq" />
 
             <ImageView
@@ -69,7 +65,6 @@
                 android:layout_height="55dp"
                 android:layout_marginTop="175dp"
                 android:layout_marginStart="265dp"
-                android:visibility="invisible"
                 app:srcCompat="@drawable/brazo_pierna_izq" />
 
             <ImageView
@@ -78,7 +73,6 @@
                 android:layout_height="55dp"
                 android:layout_marginTop="175dp"
                 android:layout_marginStart="210dp"
-                android:visibility="invisible"
                 app:srcCompat="@drawable/brazo_pierna_der" />
 
         </RelativeLayout>

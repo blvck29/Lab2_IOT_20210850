@@ -8,6 +8,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -32,6 +33,7 @@ public class GameActivity extends AppCompatActivity {
 
     private String palabraActual;
     private ArrayList<String> letrasDescubiertas;
+    private int vidas;
 
     private ChipGroup casillasPalabra;
     private TextView[] viewLetra;
@@ -133,6 +135,8 @@ public class GameActivity extends AppCompatActivity {
         initGame();
 
 
+        // Jugar de Nuevo
+
         Button playAgain = findViewById(R.id.playAgain);
         playAgain.setOnClickListener(view -> {
             casillasPalabra.removeAllViews();
@@ -172,6 +176,17 @@ public class GameActivity extends AppCompatActivity {
     private void initGame(){
 
         letrasDescubiertas = new ArrayList<>();
+        vidas = 6;
+
+        // No hay piezas de teleco (full vida)
+        findViewById(R.id.cabeza).setVisibility(View.INVISIBLE);
+        findViewById(R.id.torso).setVisibility(View.INVISIBLE);
+        findViewById(R.id.brazoDerecha).setVisibility(View.INVISIBLE);
+        findViewById(R.id.brazoIzquierda).setVisibility(View.INVISIBLE);
+        findViewById(R.id.piernaIzquierda).setVisibility(View.INVISIBLE);
+        findViewById(R.id.piernaDerecha).setVisibility(View.INVISIBLE);
+
+
         String palabraOculta = listPalabras[random.nextInt(listPalabras.length)];
         Log.d("INFO", "Palabra Aleatoria:" + " " + palabraOculta);
 
@@ -196,6 +211,7 @@ public class GameActivity extends AppCompatActivity {
             letrasDescubiertas.add(letra);
             showLetters();
         } else {
+            vidas = vidas - 1;
             badLetter();
         }
         boton.setEnabled(false);
@@ -225,7 +241,19 @@ public class GameActivity extends AppCompatActivity {
 
     private void badLetter() {
 
-        // Muestra una parte del moningote como restando vidas :c
+        if (vidas == 5){
+            findViewById(R.id.cabeza).setVisibility(View.VISIBLE);
+        } else if (vidas == 4){
+            findViewById(R.id.torso).setVisibility(View.VISIBLE);
+        } else if (vidas == 3) {
+            findViewById(R.id.brazoDerecha).setVisibility(View.VISIBLE);
+        } else if (vidas == 2) {
+            findViewById(R.id.brazoIzquierda).setVisibility(View.VISIBLE);
+        } else if (vidas == 1) {
+            findViewById(R.id.piernaIzquierda).setVisibility(View.VISIBLE);
+        } else if (vidas == 0){
+            findViewById(R.id.piernaDerecha).setVisibility(View.VISIBLE);
+        }
 
     }
 
